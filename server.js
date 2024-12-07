@@ -1,9 +1,10 @@
 const express = require("express");
 const axios = require("axios");
 const cheerio = require("cheerio");
-const app = express();
-const PORT = 5000;
 const cors = require("cors"); // Importa o CORS
+
+const app = express();
+const PORT = process.env.PORT || 5000; // Usa a porta do Render ou 5000 como fallback
 
 app.use(cors());
 
@@ -52,6 +53,24 @@ app.get("/get-pokemon", async (req, res) => {
   }
 });
 
+// Endpoint para manter o serviço ativo
+app.get("/", (req, res) => {
+  res.send("Serviço ativo! Use /get-pokemon para obter os dados.");
+});
+
+// Simula uma tarefa repetitiva (worker) em segundo plano
+const executarWorker = () => {
+  console.log("Worker iniciado!");
+  setInterval(() => {
+    console.log("Worker executando tarefa...");
+    // Adicione aqui a lógica do worker, se necessário
+  }, 60000); // Executa a cada 60 segundos
+};
+
+// Inicia o worker
+executarWorker();
+
+// Inicia o servidor
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
